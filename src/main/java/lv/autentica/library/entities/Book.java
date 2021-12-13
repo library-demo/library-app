@@ -3,6 +3,7 @@ package lv.autentica.library.entities;
 import lv.autentica.library.enums.Languages;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,26 +43,31 @@ public class Book {
     private List<Author> authors;
 
     @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", ISBN='" + ISBN + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return Objects.equals(id, book.id) &&
-                Objects.equals(ISBN, book.ISBN);
+        return Objects.equals(ISBN, book.ISBN);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ISBN);
+        return Objects.hash(ISBN);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", summary='" + summary + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", year=" + year +
+                ", language=" + language +
+                ", pageCount=" + pageCount +
+                ", image='" + image + '\'' +
+                ", authors=" + authors +
+                '}';
     }
 
     public Long getId() {

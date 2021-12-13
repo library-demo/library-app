@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-md-12 ms-sm-auto card-list">
                     <h2>Available Books</h2>
-                    <div th:if="${#lists.isEmpty(books)}">No books available</div>
+                    <div th:text="#{books.list.empty}"></div>
                     <div class="card my-2"
                          th:if="${not #lists.isEmpty(books)}"
                          th:each="book : ${books}"
