@@ -27,7 +27,7 @@ public class Book {
     private String ISBN;
 
     @Column(nullable = false)
-    private long year;
+    private Long year;
 
     @Enumerated(EnumType.STRING)
     private Languages language;
@@ -102,7 +102,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    public long getYear() {
+    public Long getYear() {
         return year;
     }
 
