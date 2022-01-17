@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: main-fragment(
-                                                ~{:: title},
-                                                ~{},
-                                                ~{:: #content}
-                                               )}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: main-fragment(
+                                            ~{:: title},
+                                            ~{},
+                                            ~{:: #content}
+                                           )}">
 <head>
     <title>Book List</title>
 </head>
@@ -15,7 +16,9 @@
         <div class="col-md-12 ms-sm-auto card-list">
             <div class="row">
                 <div class="col-6"><h2>Available Books</h2></div>
-                <div class="col-6"><a class="btn btn-primary float-end" href="/books/new" role="button">Add Book</a></div>
+                <div class="col-6" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-primary float-end" href="/books/new" role="button">Add Book</a>
+                </div>
             </div>
             <div th:if="${#lists.isEmpty(books)}">No books available</div>
             <div class="card my-2 book-card"
@@ -24,7 +27,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-6"><h5 th:text="${book.title}"></h5></div>
-                        <div class="col-6 text-end">
+                        <div class="col-6 text-end" sec:authorize="hasRole('ADMIN')">
                             <a th:href="|/books/${book.id}/edit|" class="btn btn-ligth btn-sm p-0" role="button"><i class="fas fa-edit mx-2" title="Edit"></i></a>
                             <form action="#" th:action="@{'/books/{id}'(id=${book.id})}" th:method="delete" class="d-inline float-end">
                                 <button type="submit" class="btn btn-sm p-0">

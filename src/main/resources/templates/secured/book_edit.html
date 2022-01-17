@@ -28,9 +28,9 @@
                         <label for="authors" class="form-label">Authors</label>
                         <select id="authors" th:field="*{authors}" multiple="multiple" class="custom-select form-control" required>
                             <option th:each="author : ${allAuthors}"
-                                    th:value="${{author}}"
-                                    th:text="${author}">
-                            </option>
+                                             th:value="${{author}}"
+                                             th:text="${author}">
+                        </option>
                         </select>
                     </div>
                 </div>

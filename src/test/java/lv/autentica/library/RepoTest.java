@@ -2,20 +2,26 @@ package lv.autentica.library;
 
 import lv.autentica.library.entities.Author;
 import lv.autentica.library.entities.Book;
+import lv.autentica.library.entities.Role;
+import lv.autentica.library.entities.User;
 import lv.autentica.library.enums.Languages;
 import lv.autentica.library.repositories.AuthorRepository;
 import lv.autentica.library.repositories.BookRepository;
+import lv.autentica.library.repositories.RoleRepository;
+import lv.autentica.library.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.junit.JUnitTestRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -27,7 +33,38 @@ public class RepoTest {
     @Autowired
     private AuthorRepository authorRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
     private TestEntityManager testEntityManager;
+
+    @Test
+    public void roleCreationTest() {
+        Role existingRole = roleRepository.findByName("ROLE_ADMIN");
+        if(existingRole == null) {
+            roleRepository.save(new Role("ROLE_ADMIN"));
+        }
+
+        existingRole = roleRepository.findByName("ROLE_USER");
+        if(existingRole == null) {
+            roleRepository.save(new Role("ROLE_USER"));
+        }
+    }
+
+    @Test
+    public void testCreateUser() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User user = new User();
+        user.setEmail("admin@gmail.com");
+        user.setPassword(passwordEncoder.encode("admin"));
+        user.setFirstName("Jane");
+        user.setLastName("Doe");
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_ADMIN")));
+        User savedUser = userRepository.save(user);
+        User existUser = testEntityManager.find(User.class, savedUser.getId());
+        assertThat(user.getEmail()).isEqualTo(existUser.getEmail());
+    }
 
     @Test
     public void testAuthor(){
