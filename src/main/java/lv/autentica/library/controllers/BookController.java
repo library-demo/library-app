@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -64,5 +65,20 @@ public class BookController {
     private String saveBook(@ModelAttribute BookDto book) throws Exception {
         Book savedBook = bookService.saveBook(book);
         return "redirect:/books/" + savedBook.getId();
+    }
+
+    @GetMapping("/books/search")
+    public String getBookSearchForm(Model model, @ModelAttribute("book") BookDto book) {
+        model.addAttribute("book", book);
+        List<Author> allAuthors = authorService.getAllAuthors();
+        model.addAttribute("allAuthors", allAuthors);
+        return "book_search";
+    }
+
+    @PostMapping("books/search")
+    private String seacrhBooks(Model model, @ModelAttribute BookDto book) throws Exception {
+        Collection<Book> foundBooks = bookService.searchBooks(book);
+        model.addAttribute("books", foundBooks);
+        return "index";
     }
 }

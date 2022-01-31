@@ -9,13 +9,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -74,5 +74,17 @@ public class BookService {
 
         dto.setLanguage(entity.getLanguage().name());
         return dto;
+    }
+
+    public Collection<Book> searchBooks(BookDto book) {
+        List<Long> authors = CollectionUtils.isEmpty(book.getAuthors())
+                ? null
+                : book.getAuthors().stream().map(a -> a.getId()).collect(Collectors.toList());
+        Collection<Book> results = bookRepository.searchBooks2(book.getTitle(),
+                                                        book.getISBN(),
+                                                        book.getSummary(),
+                                                        Languages.valueOf(book.getLanguage()),
+                                                        authors);
+        return results;
     }
 }

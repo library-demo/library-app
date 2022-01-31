@@ -44,6 +44,7 @@
                 </nav>
             </div>
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <div class="container-fluid collapse navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
                         <a class="nav-link" href="/"><i class="fa fa-home"></i> Home</a>
@@ -55,6 +56,8 @@
                         <a class="nav-link" href="/authors"><i class="far fa-address-book"></i> Authors</a>
                     </li>
                 </ul>
+                <div class="d-flex"><a class="nav-link" href="/books/search"><i class="fas fa-search"></i> </a></div>
+                </div>
             </nav>
         </header>
         <main th:insert="${mainContent} ?: ~{}" id="main-content"></main>
