@@ -15,6 +15,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findByTitleAndYear(String title, int year);
 
+    List<Book> findByTitleContainsOrISBNContainsOrSummaryContainsOrLanguageIsOrAuthorIdsIn(String title,
+                                                                                           String ISBN,
+                                                                                           String summary,
+                                                                                           String language,
+                                                                                           List<Long> authorIds);
+
     @Query(value = "select b.* " +
             " from books b " +
             " join book_authors ba on b.id = ba.book_id " +
